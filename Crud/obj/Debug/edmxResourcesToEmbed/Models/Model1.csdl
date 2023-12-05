@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="crudModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="entry">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="entry1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="workers" Relationship="Self.FK_workers_entry" FromRole="entry" ToRole="workers" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="role1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="workers" Relationship="Self.FK_workers_role" FromRole="role" ToRole="workers" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="workers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_role" Type="Int32" />
+    <Property Name="fio" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="data" Type="DateTime" Precision="0" />
+    <Property Name="time" Type="Time" Precision="7" />
+    <Property Name="id_entry" Type="Int32" />
+    <Property Name="photo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="entry" Relationship="Self.FK_workers_entry" FromRole="workers" ToRole="entry" />
+    <NavigationProperty Name="role" Relationship="Self.FK_workers_role" FromRole="workers" ToRole="role" />
+  </EntityType>
+  <Association Name="FK_workers_entry">
+    <End Role="entry" Type="Self.entry" Multiplicity="0..1" />
+    <End Role="workers" Type="Self.workers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="entry">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="workers">
+        <PropertyRef Name="id_entry" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_workers_role">
+    <End Role="role" Type="Self.role" Multiplicity="0..1" />
+    <End Role="workers" Type="Self.workers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="role">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="workers">
+        <PropertyRef Name="id_role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="crudEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="entry" EntityType="Self.entry" />
+    <EntitySet Name="role" EntityType="Self.role" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="workers" EntityType="Self.workers" />
+    <AssociationSet Name="FK_workers_entry" Association="Self.FK_workers_entry">
+      <End Role="entry" EntitySet="entry" />
+      <End Role="workers" EntitySet="workers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_workers_role" Association="Self.FK_workers_role">
+      <End Role="role" EntitySet="role" />
+      <End Role="workers" EntitySet="workers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
